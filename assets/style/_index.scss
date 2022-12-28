@@ -3,9 +3,12 @@
 @import './fonts';
 @import "./tooltip";
 @import "./text";
+@import "./button";
+@import "./form";
 
 html,
 body {
+  @include sans(400);
   background-color: var(--color-bg);
   color: var(--color-text);
 }

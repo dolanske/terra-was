@@ -14,7 +14,7 @@
   width: 100%;
   min-height: 100vh;
   gap: 0;
-  grid-template-columns: 224px 1fr;
+  grid-template-columns: 216px 1fr;
   align-items: stretch;
   position: relative;
 }

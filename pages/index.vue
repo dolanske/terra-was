@@ -6,11 +6,13 @@ import { debounce } from 'lodash-es'
 const { mapToken, mapStyle } = useRuntimeConfig()
 
 const map = ref<Map>()
+
 const properties = useLocalStorage('map-properties', {
   projection: 'globe',
   zoom: 10,
-})
-const accent = useCssVar('--color-text')
+}, { deep: true })
+
+const accent = useCssVar('--color-accent')
 
 /**
  *  Runs when map is loaded
@@ -69,6 +71,8 @@ function onMapClicked(e: MapMouseEvent) {
 
   selectCountry(country)
   selectedCountry.value = country
+
+  map.value?.flyTo({ center: { lat, lng: lng - 1 } })
 }
 
 const onMapZoomed = debounce((e: MapboxEvent<'zoom'>) => {
@@ -78,20 +82,22 @@ const onMapZoomed = debounce((e: MapboxEvent<'zoom'>) => {
 
 <template>
   <div class="route-map">
-    <!-- <div class="map-header">
-      <h6>The World</h6>
+    <div class="map-header">
+      <button class="btn small" data-title-bottom="Zoom In" @click="properties.zoom += 0.5">
+        <Icon name="mdi:plus-box" size="1.25rem" />
+      </button>
+      <button class="btn small" data-title-bottom="Zoom Out" @click="properties.zoom -= 0.5">
+        <Icon name="mdi:minus-box" size="1.25rem" />
+      </button>
 
-    </div> -->
+      <div class="divider" />
 
-    <div class="map-footer">
-      <!-- <div class="buttons">
-        <button @click="properties.projection === 'globe'">
-          <Icon name="mdi:earth" />
-        </button>
-        <button @click="properties.projection === 'mercator'">
-          <Icon name="mdi:map" />
-        </button>
-      </div> -->
+      <button class="btn small" :class="{ 'btn-active': properties.projection === 'globe' }" data-title-bottom="Globe Projection" @click.prevent="properties.projection = 'globe'">
+        <Icon name="mdi:earth" size="1.25rem" />
+      </button>
+      <button class="btn small" :class="{ 'btn-active': properties.projection === 'mercator' }" data-title-bottom-right="Mercator Projection" @click.prevent="properties.projection = 'mercator'">
+        <Icon name="mdi:map" size="1.25rem" />
+      </button>
     </div>
 
     <MapCreatePost v-if="selectedCountry" :code="selectedCountry" />
@@ -113,8 +119,6 @@ const onMapZoomed = debounce((e: MapboxEvent<'zoom'>) => {
 
 <style lang="scss">
 .route-map {
-  border-radius: var(--radius-lg);
-  padding: 10px;
   height: 100vh;
   max-height: 100vh;
   position: relative;
@@ -122,48 +126,51 @@ const onMapZoomed = debounce((e: MapboxEvent<'zoom'>) => {
   flex-direction: column;
   z-index: 5;
 
-  .map-footer {
+  .map-header {
     border-radius: var(--radius-md);
-    width: 680px;
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 10px;
+    align-items: center;
     position: absolute;
-    bottom: 40px;
+    top: 10px;
     z-index: 10;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: rgba(#171818,0.9);
-    backdrop-filter: blur(10px);
+    right: 10px;
+    height: 48px;
+    z-index: 10;
+    padding: 0 10px;
+    background-color: var(--color-bg-light-20);
+    backdrop-filter: blur(50px);
+    box-shadow: var(--shadow);
+
+    .divider {
+      display: block;
+      width: 1px;
+      height: 100%;
+      border-right: 1px solid var(--color-border);
+    }
 
     button {
     border-radius: var(--radius-sm);
       width: 35px;
       height: 35px;
       line-height: 35px;
+      font-size: 0.8rem;
+      text-align: center;
+      color: var(--color-text);
     }
   }
 
-  // .map-header {
-  //   border-top-left-radius: var(--radius-lg);
-  //   border-top-right-radius: var(--radius-lg);
-  //   position: absolute;
-  //   inset: 10px;
-  //   bottom: unset;
-  //   padding: 20px;
-  //   z-index: 10;
-  //   background-color: rgba(#171818,0.9);
-  //   backdrop-filter: blur(10px);
-
-  //   h6 {
-  //     margin: 0;
-  //   }
-  // }
-
   .map-wrapper {
     flex: 1;
-    border-radius: var(--radius-lg);
+    border-top-left-radius: var(--radius-lg);
+    border-bottom-left-radius: var(--radius-lg);
     background-color: var(--color-bg-dark);
+    box-shadow: var(--shadow);
 
     .mapboxgl-map {
-      border-radius: var(--radius-lg) !important;
+      border-top-left-radius: var(--radius-lg);
+      border-bottom-left-radius: var(--radius-lg);
     }
   }
 }

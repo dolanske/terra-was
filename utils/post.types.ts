@@ -8,18 +8,14 @@ interface __PostBase__ {
   // Optional description of the trip
   description: string | null
 
-  // Dates in which a country was visited
-  // Each items in the array is also used for how many times a country was visited
-  visits: string[]
-
   // Properties for the map
   map: {
-    zoom: string
+    zoom: number
     center: Coordinate
     markers: Coordinate[]
   }
 
-  // Country code
+  // Country code, used to get additional data about a country
   code: string
 }
 
@@ -28,6 +24,10 @@ interface __PostBase__ {
 export interface PostReponse extends __PostBase__ {
   id: number
   timestamp: string
+
+  // Dates in which a country was visited
+  // Each items in the array is also used for how many times a country was visited
+  visits: string[]
 }
 
 /* ---------------- // SECTION // ---------------- */
@@ -35,4 +35,5 @@ export interface PostReponse extends __PostBase__ {
 export interface PostCreate extends __PostBase__ {
   // This will be appended to the visits array
   date: string
+  images: Buffer[]
 }
