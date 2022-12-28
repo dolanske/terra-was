@@ -1,0 +1,15 @@
+@import './reset';
+@import './vars';
+@import './fonts';
+@import "./tooltip";
+@import "./text";
+
+html,
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+}
+
+.mapboxgl-control-container {
+  display: none !important;
+}

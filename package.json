@@ -7,7 +7,20 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"
   },
+  "dependencies": {
+    "@types/lodash-es": "^4.17.6",
+    "country-code-lookup": "^0.0.22",
+    "lodash-es": "^4.17.21",
+    "sass": "^1.57.1",
+    "vue-mapbox-ts": "^0.9.7",
+    "which-country": "^1.0.0"
+  },
   "devDependencies": {
-    "nuxt": "3.0.0"
+    "@antfu/eslint-config": "^0.34.0",
+    "@vueuse/core": "^9.9.0",
+    "@vueuse/nuxt": "^9.9.0",
+    "eslint": "^8.30.0",
+    "nuxt": "3.0.0",
+    "nuxt-icon": "^0.1.8"
   }
 }
