@@ -1,11 +1,5 @@
 <script setup lang='ts'>
-const props = withDefaults(defineProps<{
-  label?: string
-  value: any
-  type: string
-}>(), {
-  type: 'text',
-})
+const props = defineProps<{ label?: string; value: any }>()
 
 const emit = defineEmits<{
   (e: 'update:value', value: string): void
@@ -20,6 +14,6 @@ const attrs = useAttrs()
 <template>
   <div class="form-item form-input">
     <label v-if="props.label" v-html="props.label" />
-    <textarea v-bind="attrs" tabindex="0" :type="props.type" :value="props.value" @input="updateValue" />
+    <textarea v-bind="attrs" tabindex="0" :value="props.value" @input="updateValue" />
   </div>
 </template>

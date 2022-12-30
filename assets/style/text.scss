@@ -72,10 +72,18 @@ p {
 }
 
 code {
+  display: block;
   border-radius: 4px;
   background-color: var(--color-bg-light);
-  padding: 0 4px;
   font-size: 0.9rem;
+  width: 100%;
+  padding: 20px;
+}
+
+p code {
+  display: inline;
+  width: auto;
+  padding: 0 4px;
 }
 
 sup {

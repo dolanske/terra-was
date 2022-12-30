@@ -1,7 +1,7 @@
 <script setup lang='ts'>
 import type { SearchOutput } from 'country-code-lookup'
 import { byIso } from 'country-code-lookup'
-import type { PostCreate } from '~~/utils/post.types'
+import type { __TripBase__ } from '~~/utils/trip.types'
 
 const props = defineProps<{
   code: string
@@ -13,29 +13,73 @@ const country = computed<SearchOutput>(() => byIso(props.code))
  * Form
  */
 
-const form = reactive<PostCreate>({
+const form = reactive<__TripBase__>({
   title: '',
   description: null,
   map: {
     zoom: 0,
     center: [0, 0],
-    markers: [],
+    // markers: [],
   },
   date: '',
-  code: '',
+  iso: '',
   images: [],
 })
 
 watch(() => props.code, (value) => {
-  form.code = value
+  form.iso = value
 })
 
 async function submit() {
   // https://pqina.nl/blog/upload-image-with-nodejs/
 }
 
-function removeImage(path: string) {
+/**
+ * Handle uploading of images
+ */
 
+const photos = reactive({ files: [] })
+
+function uploadPhotos(e: Event) {
+  e.preventDefault()
+  e.stopPropagation()
+
+  const files = (e.currentTarget as HTMLInputElement).files
+
+  if (!files)
+    return
+
+  let index = 0
+
+  for (const file of files) {
+    const formData = new FormData()
+    formData.append('file', file)
+
+    // files.values[index] = {
+    //   name: file.name,
+    //   size: file.size,
+    //   loading: true,
+    //   key: null,
+    // }
+
+    useFetch('/api/images')
+
+    // return upload('/api/images/', formData)
+    //   .then((response: any) => {
+    //     Object.assign(files.values[index], {
+    //       loading: false,
+    //       key: response.key,
+    //     })
+    //   })
+    //   .catch((error) => {
+    //     Object.assign(files.values[index], {
+    //       loading: false,
+    //       error,
+    //     })
+    //   })
+
+    index++
+  }
 }
 </script>
 
@@ -65,7 +109,7 @@ function removeImage(path: string) {
         <!-- <MapPostImage url="https://friends.hivecom.net/data/image/rNbSjBKCSx-RWWSE7SZCYQ/tiny.jpg" @remove="removeImage('')" /> -->
 
         <div class="image-input">
-          <input type="file" name="file" multiple accept="image/*">
+          <input type="file" name="file" multiple accept="image/*" @input="uploadPhotos">
           <label for="file">
             <Icon name="ic:baseline-add-photo-alternate" size="1.4rem" />
             Photos
@@ -100,6 +144,7 @@ function removeImage(path: string) {
       display: none;
 
       & + label {
+        @include t();
         cursor: pointer;
         border-radius: var(--radius-md);
         display: flex;
@@ -111,7 +156,7 @@ function removeImage(path: string) {
         height: 84px;
         font-size: 0.8rem;
         text-align: center;
-        border: 2px dashed var(--color-accent);
+        border: 2px dashed var(--color-border);
         z-index: 2;
         position: relative;
 
@@ -121,6 +166,8 @@ function removeImage(path: string) {
             transform: scale(1);
             border-radius: var(--radius-md);
           }
+
+          border-color: var(--color-accent);
         }
 
         &:after {

@@ -12,6 +12,8 @@ const properties = useLocalStorage('map-properties', {
   zoom: 10,
 }, { deep: true })
 
+// console.log(properties.value)
+
 const accent = useCssVar('--color-accent')
 
 /**
@@ -72,7 +74,7 @@ function onMapClicked(e: MapMouseEvent) {
   selectCountry(country)
   selectedCountry.value = country
 
-  map.value?.flyTo({ center: { lat, lng: lng - 1 } })
+  // map.value?.flyTo({ center: { lat, lng: lng - 1 } })
 }
 
 const onMapZoomed = debounce((e: MapboxEvent<'zoom'>) => {
@@ -92,10 +94,10 @@ const onMapZoomed = debounce((e: MapboxEvent<'zoom'>) => {
 
       <div class="divider" />
 
-      <button class="btn small" :class="{ 'btn-active': properties.projection === 'globe' }" data-title-bottom="Globe Projection" @click.prevent="properties.projection = 'globe'">
+      <button class="btn small" :class="{ 'btn-active': properties.projection === 'globe' }" data-title-bottom="Globe Projection" @click="properties.projection = 'globe'">
         <Icon name="mdi:earth" size="1.25rem" />
       </button>
-      <button class="btn small" :class="{ 'btn-active': properties.projection === 'mercator' }" data-title-bottom-right="Mercator Projection" @click.prevent="properties.projection = 'mercator'">
+      <button class="btn small" :class="{ 'btn-active': properties.projection === 'mercator' }" data-title-bottom-right="Mercator Projection" @click="properties.projection = 'mercator'">
         <Icon name="mdi:map" size="1.25rem" />
       </button>
     </div>

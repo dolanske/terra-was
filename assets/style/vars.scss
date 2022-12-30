@@ -1,10 +1,12 @@
 :root {
   --color-text: #DEDEDE;
   --color-text-light: #b4b2b2;
+  --color-text-lighter: #6e6c6c;
 
   --color-bg: #1F2120;
   --color-bg-light: #2A2E2C;
   --color-bg-dark: #171818;
+  --color-bg-dark-hover: hsl(from var(--color-bg-dark) h s calc(l - 5%)); 
 
   --color-border: #383b39;
 

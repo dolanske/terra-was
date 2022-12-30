@@ -11,6 +11,8 @@
     "@types/lodash-es": "^4.17.6",
     "country-code-lookup": "^0.0.22",
     "lodash-es": "^4.17.21",
+    "mongoose": "^6.8.2",
+    "mongoose-bcrypt": "^1.10.0",
     "sass": "^1.57.1",
     "vue-mapbox-ts": "^0.9.7",
     "which-country": "^1.0.0"
