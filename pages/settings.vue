@@ -30,7 +30,7 @@ async function submit() {
   //   },
   // })
 
-  res.value = await useFetch('/api/country/?iso=FIN')
+  res.value = await useFetch('/api/country/FIN')
 
   // res.value = await useFetch('/api/country', {
   //   method: 'PUT',
@@ -51,7 +51,7 @@ async function submit() {
     </button>
     <br>
     <code>
-      <pre>{{ res }}</pre>
+      <pre>{{ res.data }}</pre>
     </code>
   </div>
 </template>

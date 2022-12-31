@@ -29,7 +29,12 @@ export default defineEventHandler(async (event) => {
   current.visits.push({ date, postId })
 
   return CountryModel.update({ iso }, current)
-    .then(() => current)
+    .then(() => {
+      return {
+        iso,
+        visits: current.visits,
+      }
+    })
     .catch((err) => {
       event.node.res.statusCode = 500
       return {

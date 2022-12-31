@@ -30,7 +30,14 @@ export default defineEventHandler(async (event) => {
   const newCountry: Country = { iso, visits: [] }
 
   return CountryModel.create(newCountry)
-    .then(res => res)
+    .then(({ iso, visits }) => {
+      // Return only values we want
+      return {
+        iso,
+        // Filter out db stuff
+        visits: visits.map(({ date, postId }) => ({ date, postId })),
+      }
+    })
     .catch((err) => {
       event.node.res.statusCode = 500
       return {
