@@ -29,15 +29,15 @@ export default defineEventHandler(async (event) => {
   const newTrip: TripDB = { id, title, description, map, iso, images, date }
 
   // Save a new visit to a country db schema
-  const countryExists = await CountryModel.findById(iso)
+  const countryExists = await CountryModel.findOne({ iso })
 
   if (!countryExists) {
     // Create entry first
-    await useFetch('/api/country', { method: 'POST', body: { iso } })
+    await $fetch('/api/country', { method: 'POST', body: { iso } })
   }
 
   // Update country by giving it the posts date. This will save it as a visit within that country.
-  await useFetch('/api/country', { method: 'PUT', body: { iso, date, postId: id } })
+  await $fetch('/api/country', { method: 'PUT', body: { iso, date, postId: id } })
 
   TripModel.create(newTrip)
 })

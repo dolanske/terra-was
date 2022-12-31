@@ -8,20 +8,20 @@ const res = ref({})
 // }
 
 async function submit() {
-  // res.value = await useFetch('/api/trip', {
-  //   method: 'POST',
-  //   body: {
-  //     title: 'Hello World',
-  //     description: 'This better work.',
-  //     iso: 'FIN',
-  //     images: [],
-  //     date: Date.now(),
-  //     map: {
-  //       zoom: 10,
-  //       center: [26.580630439319265, 63.63131223322321],
-  //     },
-  //   },
-  // })
+  res.value = await useFetch('/api/trip', {
+    method: 'POST',
+    body: {
+      title: 'Hello World',
+      description: 'This better work.',
+      iso: 'FIN',
+      images: [],
+      date: Date.now(),
+      map: {
+        zoom: 10,
+        center: [26.580630439319265, 63.63131223322321],
+      },
+    },
+  })
 
   // res.value = await useFetch('/api/country', {
   //   method: 'POST',
@@ -30,7 +30,7 @@ async function submit() {
   //   },
   // })
 
-  res.value = await useFetch('/api/country/FIN')
+  // res.value = await useFetch('/api/country/FIN')
 
   // res.value = await useFetch('/api/country', {
   //   method: 'PUT',
