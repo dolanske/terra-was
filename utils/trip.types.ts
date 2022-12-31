@@ -15,19 +15,19 @@ export interface __TripBase__ {
   }
   // Country code, used to get additional data about a country
   iso: string
-  date: string
+  date: number
   images: string[]
 }
 
 /* ---------------- // SECTION // ---------------- */
 // Interface for what the API returns
 export interface TripResponse extends __TripBase__ {
-  id: string
+  id: number
   // Dates in which a country was visited
   // Each items in the array is also used for how many times a country was visited
   visits: string[]
 }
 
 export interface TripDB extends __TripBase__ {
-  id: string
+  id: number
 }

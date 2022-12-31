@@ -21,7 +21,7 @@ const form = reactive<__TripBase__>({
     center: [0, 0],
     // markers: [],
   },
-  date: '',
+  date: 0,
   iso: '',
   images: [],
 })
@@ -32,6 +32,7 @@ watch(() => props.code, (value) => {
 
 async function submit() {
   // https://pqina.nl/blog/upload-image-with-nodejs/
+
 }
 
 /**

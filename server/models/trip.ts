@@ -5,7 +5,7 @@ import type { TripDB } from '~~/utils/trip.types'
 
 const schema = new mongoose.Schema<TripDB>(
   {
-    id: { type: String, unique: true },
+    id: { type: Number, unique: true },
     title: String,
     description: String,
     map: {
@@ -21,4 +21,4 @@ const schema = new mongoose.Schema<TripDB>(
 
 schema.plugin(bcrypt)
 
-export const tripModel = mongoose.model<TripDB>('Trip', schema, 'trip')
+export const TripModel = mongoose.model<TripDB>('Trip', schema, 'trip')
