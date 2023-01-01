@@ -54,7 +54,7 @@ function uploadPhotos(e: Event) {
 
   for (const file of files) {
     const formData = new FormData()
-    formData.append('file', file)
+    formData.append('photo', file)
 
     // files.values[index] = {
     //   name: file.name,

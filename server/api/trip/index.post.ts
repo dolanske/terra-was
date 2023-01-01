@@ -39,5 +39,13 @@ export default defineEventHandler(async (event) => {
   // Update country by giving it the posts date. This will save it as a visit within that country.
   await $fetch('/api/country', { method: 'PUT', body: { iso, date, postId: id } })
 
-  TripModel.create(newTrip)
+  return TripModel.create(newTrip)
+    .then(() => newTrip)
+    .catch((err) => {
+      event.node.res.statusCode = 500
+      return {
+        code: '[trip.post] SERVER_ERROR',
+        message: `Internal server error. ${err.message}`,
+      }
+    })
 })

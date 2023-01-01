@@ -1,6 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  modules: ['nuxt-icon', '@vueuse/nuxt'],
+  modules: ['nuxt-icon', '@vueuse/nuxt', 'formidable'],
   nitro: {
     plugins: ['~/server/db/index.ts'],
   },
@@ -26,5 +26,7 @@ export default defineNuxtConfig({
       mapStyle: 'mapbox://styles/dolanske000/cl3hpk2ji005514l4asj0h9nf',
     },
     MONGO_URL: process.env.MONGO_URL,
+    IS_DEV: process.env.NODE_ENV !== 'production',
+    IS_PRD: process.env.NODE_ENV === 'production',
   },
 })

@@ -28,7 +28,7 @@ export default defineEventHandler(async (event) => {
 
   current.visits.push({ date, postId })
 
-  return CountryModel.update({ iso }, current)
+  return CountryModel.updateOne({ iso }, current)
     .then(() => {
       return {
         iso,
