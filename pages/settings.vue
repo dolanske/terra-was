@@ -1,5 +1,7 @@
 <script setup lang='ts'>
-const res = reactive<{ value: any[] }>({ value: [] })
+import type { Photo } from '~~/utils/photo.types'
+
+const res = reactive<{ v: string[] }>({ v: [] })
 
 // This event should be called when files are input (should be on <input> el)
 async function submit(event: Event) {
@@ -14,12 +16,15 @@ async function submit(event: Event) {
     const formData = new FormData()
     formData.append('photo', file)
 
-    const id = await useFetch('/api/photo', {
+    const id = await useFetch<Photo>('/api/photo', {
       method: 'POST',
       body: formData,
     })
 
-    res.value.push(id.data)
+    res.v.push(id.data.value?.path ?? '')
+
+    // res.value.push(id.data)
+    // res.value = id.data.value?.path ?? ''
   }
 
   // res.value = await useFetch('/api/trip', {
@@ -68,7 +73,7 @@ async function submit(event: Event) {
     <code>
 
       <pre>
-        {{ res.value }}
+        {{ res }}
       </pre>
     </code>
     <br>
@@ -81,5 +86,7 @@ async function submit(event: Event) {
         Query
       </button> -->
     </form>
+
+    <div />
   </div>
 </template>

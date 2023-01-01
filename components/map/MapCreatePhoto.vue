@@ -1,6 +1,6 @@
 <script setup lang='ts'>
 const props = defineProps<{
-  url: string
+  path: string
 }>()
 
 const emit = defineEmits<{
@@ -13,7 +13,7 @@ const emit = defineEmits<{
     <button @click="emit('remove')">
       <Icon name="mdi:close" />
     </button>
-    <img :src="props.url">
+    <img :src="props.path">
   </div>
 </template>
 

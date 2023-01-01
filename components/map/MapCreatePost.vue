@@ -1,6 +1,7 @@
 <script setup lang='ts'>
 import type { SearchOutput } from 'country-code-lookup'
 import { byIso } from 'country-code-lookup'
+import type { Photo } from '~~/utils/photo.types'
 import type { __TripBase__ } from '~~/utils/trip.types'
 
 const props = defineProps<{
@@ -41,7 +42,7 @@ async function submit() {
 
 const photos = reactive({ files: [] })
 
-function uploadPhotos(e: Event) {
+async function uploadPhotos(e: Event) {
   e.preventDefault()
   e.stopPropagation()
 
@@ -56,28 +57,10 @@ function uploadPhotos(e: Event) {
     const formData = new FormData()
     formData.append('photo', file)
 
-    // files.values[index] = {
-    //   name: file.name,
-    //   size: file.size,
-    //   loading: true,
-    //   key: null,
-    // }
-
-    useFetch('/api/images')
-
-    // return upload('/api/images/', formData)
-    //   .then((response: any) => {
-    //     Object.assign(files.values[index], {
-    //       loading: false,
-    //       key: response.key,
-    //     })
-    //   })
-    //   .catch((error) => {
-    //     Object.assign(files.values[index], {
-    //       loading: false,
-    //       error,
-    //     })
-    //   })
+    const id = await useFetch<Photo>('/api/photo', {
+      method: 'POST',
+      body: formData,
+    })
 
     index++
   }
@@ -104,10 +87,10 @@ function uploadPhotos(e: Event) {
 
       <span class="form-label">Photos</span>
       <div class="image-input-wrap">
-        <!-- <MapPostImage url="https://friends.hivecom.net/data/image/u1Lc1SdJTkm_ebw6fvbCJQ/tiny.jpg" @remove="removeImage('')" /> -->
-        <!-- <MapPostImage url="https://friends.hivecom.net/data/image/HSd2nWqeRnaRZIX_LzoxAg/tiny.jpg" @remove="removeImage('')" /> -->
-        <!-- <MapPostImage url="https://friends.hivecom.net/data/image/WrmT272FQFaa8zmxPexjVg/tiny.jpg" @remove="removeImage('')" /> -->
-        <!-- <MapPostImage url="https://friends.hivecom.net/data/image/rNbSjBKCSx-RWWSE7SZCYQ/tiny.jpg" @remove="removeImage('')" /> -->
+        <!-- <MapPostImage path="https://friends.hivecom.net/data/image/u1Lc1SdJTkm_ebw6fvbCJQ/tiny.jpg" @remove="removeImage('')" /> -->
+        <!-- <MapPostImage path="https://friends.hivecom.net/data/image/HSd2nWqeRnaRZIX_LzoxAg/tiny.jpg" @remove="removeImage('')" /> -->
+        <!-- <MapPostImage path="https://friends.hivecom.net/data/image/WrmT272FQFaa8zmxPexjVg/tiny.jpg" @remove="removeImage('')" /> -->
+        <!-- <MapPostImage path="https://friends.hivecom.net/data/image/rNbSjBKCSx-RWWSE7SZCYQ/tiny.jpg" @remove="removeImage('')" /> -->
 
         <div class="image-input">
           <input type="file" name="file" multiple accept="image/*" @input="uploadPhotos">

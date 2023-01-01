@@ -1,3 +1,5 @@
+import type { Photo } from './photo.types'
+
 type Coordinate = [number, number]
 
 /* ---------------- // SECTION // ---------------- */
@@ -16,7 +18,7 @@ export interface __TripBase__ {
   // Country code, used to get additional data about a country
   iso: string
   date: number
-  images: string[]
+  images: Photo[]
 }
 
 /* ---------------- // SECTION // ---------------- */

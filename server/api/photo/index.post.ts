@@ -4,13 +4,13 @@ import { copyFile } from 'fs/promises'
 import path from 'path'
 import { randomUUID } from 'crypto'
 import formidable from 'formidable'
-import type { Image } from '~~/utils/image.types'
-import { ImageModel } from '~~/server/models/image'
+import type { Photo } from '~~/utils/photo.types'
+import { PhotoModel } from '~~/server/models/photo'
 
 export default defineEventHandler(async (event) => {
   const form = formidable({ multiples: true })
 
-  const res = new Promise<Image>((resolve, reject) => {
+  const res = new Promise<Photo>((resolve, reject) => {
     form.parse(event.node.req, async (err, fields, files) => {
       // We know files will always be a single file
       const file: formidable.File = Array.isArray(files) ? files[0].photo : files.photo
@@ -25,23 +25,23 @@ export default defineEventHandler(async (event) => {
         const type = file.mimetype.split('/')[1]
         const name = `${randomUUID()}.${type}`
 
-        const { IS_DEV } = useRuntimeConfig()
+        // const { IS_DEV } = useRuntimeConfig()
 
         // Depending on if we are in dev or prod, the paths are different
         // Production assets live in /public/* while in dev they are in
-        const PATH = IS_DEV ? ['assets', 'uploads', name] : ['dist', 'uploads', name]
+        // const PATH = IS_DEV ? ['public', 'photos', name] : ['dist', 'photos', name]
 
         const oldPath = file.filepath
-        const newPath = path.join(...PATH)
+        const newPath = path.join('public', 'photos', name)
 
         // fs.copyFileSync(oldPath, newPath)
         await copyFile(oldPath, newPath)
 
-        const newImage: Image = { path: PATH.join('/'), id: name }
+        const newPhoto: Photo = { path: `/photos/${name}`, id: name }
 
         // Save image ID to the DB
-        await ImageModel.create(newImage)
-          .then(() => resolve(newImage))
+        await PhotoModel.create(newPhoto)
+          .then(() => resolve(newPhoto))
           .catch(() => reject(new Error('Error when creating a DB entry for image')))
       }
       else {

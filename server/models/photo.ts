@@ -1,8 +1,8 @@
 import mongoose from 'mongoose'
 import bcrypt from 'mongoose-bcrypt'
-import type { Image } from '~~/utils/image.types'
+import type { Photo } from '~~/utils/photo.types'
 
-const schema = new mongoose.Schema<Image>(
+const schema = new mongoose.Schema<Photo>(
   {
     id: { unique: true, type: String },
     path: String,
@@ -12,4 +12,4 @@ const schema = new mongoose.Schema<Image>(
 
 schema.plugin(bcrypt)
 
-export const ImageModel = mongoose.model<Image>('Image', schema, 'image')
+export const PhotoModel = mongoose.model<Photo>('Photo', schema, 'photo')
