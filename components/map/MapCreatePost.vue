@@ -1,6 +1,7 @@
 <script setup lang='ts'>
 import type { SearchOutput } from 'country-code-lookup'
 import { byIso } from 'country-code-lookup'
+import { parse } from 'marked'
 import type { Photo } from '~~/utils/photo.types'
 import type { __TripBase__ } from '~~/utils/trip.types'
 import type { Uploader } from '~~/utils/other.types'
@@ -9,15 +10,20 @@ const props = defineProps<{
   code: string
 }>()
 
+const emit = defineEmits<{
+  (e: 'close'): void
+}>()
+
 const country = computed<SearchOutput>(() => byIso(props.code))
+const expand = ref(false)
 
 /**
  * Form
  */
 
-const form = reactive<__TripBase__>({
+const defaultForm: __TripBase__ = {
   title: '',
-  description: null,
+  description: '',
   map: {
     zoom: 0,
     center: [0, 0],
@@ -26,11 +32,24 @@ const form = reactive<__TripBase__>({
   date: 0,
   iso: '',
   images: [],
-})
+}
+
+const form = reactive<__TripBase__>(structuredClone(defaultForm))
+
+const descriptionPreview = computed(() => parse(form.description))
 
 watch(() => props.code, (value) => {
   form.iso = value
 })
+
+function clear() {
+  Object.assign(form, structuredClone(defaultForm))
+}
+
+function cancel() {
+  clear()
+  emit('close')
+}
 
 async function submit() {
   // Submit the whole form
@@ -127,51 +146,76 @@ async function deletePhoto(item: Uploader) {
 </script>
 
 <template>
-  <div v-if="country" class="map-create-post">
-    <div class="title-wrap">
-      <img :src="getFlagUrl(country.iso2)" alt="">
-      <h6>{{ country.country }}</h6>
-    </div>
+  <div v-if="country" class="map-create-post" :class="{ 'is-expand': expand }">
+    <div class="map-create-form">
+      <div class="context-wrap">
+        <button
+          class="btn"
+          :class="{ 'btn-active': expand }"
+          :data-title-bottom="`${expand ? 'Collapse' : 'Expand'} Editor`"
+          @click="expand = !expand"
+        >
+          <Icon name="material-symbols:expand-content" size="20" />
+        </button>
+        <button class="btn" data-title-bottom="Close Editor" @click="cancel()">
+          <Icon name="mdi:close" size="20" />
+        </button>
+      </div>
 
-    <ul>
-      <li>Visited: <strong>0 times</strong></li>
-      <li>Region: <strong>{{ country.region }}</strong></li>
-    </ul>
+      <div class="title-wrap">
+        <img :src="getFlagUrl(country.iso2)" alt="">
+        <h6>{{ country.country }}</h6>
+      </div>
 
-    <hr>
+      <ul class="metadata">
+        <li>Visited: <strong>0 times</strong></li>
+        <li>Region: <strong>{{ country.region }}</strong></li>
+      </ul>
 
-    <form @submit="submit">
-      <FormInput v-model:value="form.title" label="Name" :placeholder="`${country.capital} was awesome!`" />
-      <FormTextarea v-model:value="form.description" label="Description" placeholder="Feel free to use markdown" />
+      <hr>
 
-      <span class="form-label">Photos</span>
-      <div class="image-input-wrap">
-        <MapCreatePhoto
-          v-for="[, item] in uploader.photos"
-          :key="item.index"
-          :data="item"
-          @remove="deletePhoto(item)"
-        />
+      <div class="form-wrap-outer">
+        <div class="form-wrap-inner">
+          <form @submit="submit">
+            <FormInput v-model:value="form.title" label="Name" :placeholder="`${country.capital} was awesome!`" />
+            <FormTextarea v-model:value="form.description" label="Description" placeholder="Feel free to use markdown" />
 
-        <div class="image-input">
-          <input id="file" type="file" name="file" multiple accept="image/*" tabindex="0" @input="uploadPhotos">
-          <label for="file">
-            <Icon name="ic:baseline-add-photo-alternate" size="1.4rem" />
-            Photos
-          </label>
+            <span class="form-label">Photos</span>
+            <div class="image-input-wrap">
+              <MapCreatePhoto
+                v-for="[, item] in uploader.photos"
+                :key="item.index"
+                :data="item"
+                @remove="deletePhoto(item)"
+              />
+
+              <div class="image-input">
+                <input id="file" type="file" name="file" multiple accept="image/*" tabindex="0" @input="uploadPhotos">
+                <label for="file">
+                  <Icon name="ic:baseline-add-photo-alternate" size="1.4rem" />
+                  Photos
+                </label>
+              </div>
+            </div>
+          </form>
+
+          <hr>
+
+          <div class="flex-wrap right">
+            <button class="button btn-transparent" @click="clear">
+              Clear
+            </button>
+            <button class="button btn-accent bold" @click="submit">
+              Create
+            </button>
+          </div>
         </div>
       </div>
-    </form>
-
-    <br>
-
-    <code>
-      <pre>
-{{ form }}
-
-{{ uploader.photos }}
-      </pre>
-    </code>
+    </div>
+    <div v-if="expand" class="map-create-preview">
+      <Tag text="Preview" gray />
+      <div v-html="descriptionPreview" />
+    </div>
   </div>
 </template>
 
@@ -183,24 +227,63 @@ async function deletePhoto(item: Uploader) {
   left: 10px;
   bottom: 10px;
   width: 386px;
-  z-index: 5;
+  z-index: 25;
   padding: 10px;
-  display: block;
   background-color: var(--color-bg-light-20);
   backdrop-filter: blur(50px);
   box-shadow: var(--shadow);
 
-  .image-input-wrap {
+  &.is-expand {
     display: grid;
+    gap: 40px;
+    flex: 1;
+    grid-template-columns: 1fr 1fr;
+    width: unset;
+    right: 10px;
+  }
+
+  .map-create-form {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .map-create-preview {
+    border-radius: var(--radius-md);
+    padding: 20px;
+    background-color: var(--color-bg-light-40);
+
+    .tag {
+      margin-bottom: 10px;
+    }
+  }
+
+  .form-wrap-outer {
+    flex: 1;
+    height: 100%;
+    width: 100%;
+    position: relative;
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    .form-wrap-inner {
+      position: absolute;
+      inset: 0;
+      padding: 10px;
+    }
+  }
+
+  .image-input-wrap {
+    display: flex;
+    flex-wrap: wrap;
     gap: 10px;
-    grid-template-columns: repeat(4, 1fr);
+    justify-content: flex-start;
 
     input[type=file] {
       display: none;
 
       &:focus + label {
         border-color: var(--color-accent);
-
       }
 
       & + label {
@@ -212,7 +295,7 @@ async function deletePhoto(item: Uploader) {
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        width: 100%;
+        width: 84px;
         height: 84px;
         font-size: 0.8rem;
         text-align: center;
@@ -246,28 +329,18 @@ async function deletePhoto(item: Uploader) {
     }
   }
 
-  .saved-trips-btn {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    svg {
-      color: var(--color-accent);
-    }
-  }
-
   hr {
     display: block;
     margin: 25px -10px;
     border-bottom: 1px solid var(--color-border);
   }
 
-  ul {
+  .metadata {
     display: flex;
     gap: 20px;
     margin: 0;
     padding: 0;
-    margin-bottom: 20px;
+    // margin-bottom: 20px;
     padding-left: 42px;
 
     li {
@@ -289,12 +362,30 @@ async function deletePhoto(item: Uploader) {
     }
   }
 
+  .context-wrap {
+    display: flex;
+    justify-content: flex-end;
+    gap: 5px;
+    margin-bottom: 5px;
+    width: 100%;
+    z-index: 100;
+
+    button {
+      width: 35px;
+      height: 35px;
+      text-align: center;
+      line-height: 32px;
+      color: var(--color-text-light);
+    }
+  }
+
   .title-wrap {
     display: grid;
     grid-template-columns: 32px 1fr;
     gap: 10px;
-    align-items: center;
+    align-items: flex-start;
     margin-bottom: 5px;
+    width: 100%;
 
     h6 {
       margin-bottom: 0;
@@ -306,9 +397,8 @@ async function deletePhoto(item: Uploader) {
       display: block;
       object-position: center;
       object-fit: contain;
-      // max-width: 32px;
-      // max-height: 32px;
       height: auto;
+      transform: translateY(-4px);
     }
   }
 }

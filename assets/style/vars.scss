@@ -6,16 +6,18 @@
   --color-bg: #1F2120;
   --color-bg-light: #2A2E2C;
   --color-bg-dark: #171818;
-  --color-bg-dark-hover: hsl(from var(--color-bg-dark) h s calc(l - 5%)); 
+  --color-bg-dark-hover:#262929;
 
   --color-border: #383b39;
 
   --color-accent: #69F0BF;
   --color-accent-bg: #223931;
+  --color-accent-bg-hover: #35574b;
 
   --color-bg-light-75: rgba(42, 46, 44, 0.75);
+  --color-bg-light-40: rgba(42, 46, 44, 0.4);
   --color-bg-light-20: rgba(42, 46, 44, 0.2);
-  --color-bg-light-10: rgba(42, 46, 44, 0.05);
+  --color-bg-light-10: rgba(42, 46, 44, 0.1);
 
   --shadow: 0 2px 12px rgba(0,0,0, 0.2);
 

@@ -55,6 +55,11 @@ function selectCountry(code: string | null) {
   ])
 }
 
+function reset() {
+  selectCountry(null)
+  selectedCountry.value = null
+}
+
 /**
  * Runs when map is clicked
  */
@@ -66,15 +71,12 @@ function onMapClicked(e: MapMouseEvent) {
     return
 
   if (country === selectedCountry.value) {
-    selectCountry(null)
-    selectedCountry.value = null
+    reset()
     return
   }
 
   selectCountry(country)
   selectedCountry.value = country
-
-  // map.value?.flyTo({ center: { lat, lng: lng - 1 } })
 }
 
 const onMapZoomed = debounce((e: MapboxEvent<'zoom'>) => {
@@ -86,23 +88,23 @@ const onMapZoomed = debounce((e: MapboxEvent<'zoom'>) => {
   <div class="route-map">
     <div class="map-header">
       <button class="btn small" data-title-bottom="Zoom In" @click="properties.zoom += 0.5">
-        <Icon name="mdi:plus-box" size="1.25rem" />
+        <Icon name="mdi:plus-box" size="20" />
       </button>
       <button class="btn small" data-title-bottom="Zoom Out" @click="properties.zoom -= 0.5">
-        <Icon name="mdi:minus-box" size="1.25rem" />
+        <Icon name="mdi:minus-box" size="20" />
       </button>
 
       <div class="divider" />
 
       <button class="btn small" :class="{ 'btn-active': properties.projection === 'globe' }" data-title-bottom="Globe Projection" @click="properties.projection = 'globe'">
-        <Icon name="mdi:earth" size="1.25rem" />
+        <Icon name="mdi:earth" size="20" />
       </button>
       <button class="btn small" :class="{ 'btn-active': properties.projection === 'mercator' }" data-title-bottom-right="Mercator Projection" @click="properties.projection = 'mercator'">
-        <Icon name="mdi:map" size="1.25rem" />
+        <Icon name="mdi:map" size="20" />
       </button>
     </div>
 
-    <MapCreatePost v-if="selectedCountry" :code="selectedCountry" />
+    <MapCreatePost v-if="selectedCountry" :code="selectedCountry" @close="reset()" />
 
     <div class="map-wrapper">
       <MapboxMap
@@ -142,7 +144,7 @@ const onMapZoomed = debounce((e: MapboxEvent<'zoom'>) => {
     z-index: 10;
     padding: 0 10px;
     background-color: var(--color-bg-light-20);
-    backdrop-filter: blur(50px);
+    backdrop-filter: blur(75px);
     box-shadow: var(--shadow);
 
     .divider {
@@ -160,6 +162,7 @@ const onMapZoomed = debounce((e: MapboxEvent<'zoom'>) => {
       font-size: 0.8rem;
       text-align: center;
       color: var(--color-text);
+
     }
   }
 

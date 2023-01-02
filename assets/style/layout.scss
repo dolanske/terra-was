@@ -1,0 +1,14 @@
+.flex-wrap {
+  display: flex;
+  gap: 16px;
+  justify-content: flex-start;
+
+  &.center {
+    justify-content: center;
+  }
+
+  &.right {
+    justify-content: flex-end;
+  }
+  
+}
