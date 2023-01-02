@@ -8,6 +8,8 @@ import type { Uploader } from '~~/utils/other.types'
 
 const props = defineProps<{
   code: string
+  zoom: number
+  center: [number, number]
 }>()
 
 const emit = defineEmits<{
@@ -16,44 +18,6 @@ const emit = defineEmits<{
 
 const country = computed<SearchOutput>(() => byIso(props.code))
 const expand = ref(false)
-
-/**
- * Form
- */
-
-const defaultForm: __TripBase__ = {
-  title: '',
-  description: '',
-  map: {
-    zoom: 0,
-    center: [0, 0],
-    // markers: [],
-  },
-  date: 0,
-  iso: '',
-  images: [],
-}
-
-const form = reactive<__TripBase__>(structuredClone(defaultForm))
-
-const descriptionPreview = computed(() => parse(form.description))
-
-watch(() => props.code, (value) => {
-  form.iso = value
-})
-
-function clear() {
-  Object.assign(form, structuredClone(defaultForm))
-}
-
-function cancel() {
-  clear()
-  emit('close')
-}
-
-async function submit() {
-  // Submit the whole form
-}
 
 /**
  * Handle uploading of images
@@ -143,6 +107,59 @@ async function deletePhoto(item: Uploader) {
   await useFetch(`/api/photo/${item.file.id}`, { method: 'DELETE' })
   uploader.photos.delete(item.index)
 }
+
+/**
+ * Form
+ */
+
+const defaultForm = { title: '', description: '' }
+const form = reactive({ ...defaultForm })
+const descriptionPreview = computed(() => parse(form.description))
+
+function clear() {
+  Object.assign(form, defaultForm)
+}
+
+function cancel() {
+  clear()
+  emit('close')
+}
+
+async function submit() {
+  // TODO: form validation
+
+  // if(validation.err)
+  //   return
+
+  // Extract images from the file array
+  const images: Photo[] = []
+
+  for (const image of uploader.photos.values()) {
+    if (image.file)
+      images.push(image.file)
+  }
+
+  // Construct trip object
+  const actualTrip: __TripBase__ = {
+    title: form.title,
+    description: form.description,
+    map: {
+      zoom: props.zoom,
+      center: props.center,
+    },
+    iso: props.code,
+    date: Date.now(),
+    images,
+  }
+
+  // Save trip to the DB, display error if any
+  const { data, error } = await useFetch('/api/trip', {
+    method: 'POST',
+    body: actualTrip,
+  })
+
+  // Switch context to 'update successful' or 'error' display
+}
 </script>
 
 <template>
@@ -229,17 +246,17 @@ async function deletePhoto(item: Uploader) {
   width: 386px;
   z-index: 25;
   padding: 10px;
-  background-color: var(--color-bg-light-20);
-  backdrop-filter: blur(50px);
+  background-color: var(--color-bg-light-40);
+  backdrop-filter: blur(75px);
   box-shadow: var(--shadow);
 
   &.is-expand {
     display: grid;
-    gap: 40px;
-    flex: 1;
+    gap: 10px;
     grid-template-columns: 1fr 1fr;
     width: unset;
     right: 10px;
+    max-width: 1440px;
   }
 
   .map-create-form {
@@ -251,7 +268,7 @@ async function deletePhoto(item: Uploader) {
   .map-create-preview {
     border-radius: var(--radius-md);
     padding: 20px;
-    background-color: var(--color-bg-light-40);
+    background-color: var(--color-bg-light-75);
 
     .tag {
       margin-bottom: 10px;
@@ -269,7 +286,7 @@ async function deletePhoto(item: Uploader) {
     .form-wrap-inner {
       position: absolute;
       inset: 0;
-      padding: 10px;
+      padding-top: 10px;
     }
   }
 

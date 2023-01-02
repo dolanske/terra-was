@@ -27,7 +27,7 @@ export interface TripResponse extends __TripBase__ {
   id: number
   // Dates in which a country was visited
   // Each items in the array is also used for how many times a country was visited
-  visits: string[]
+  // visits: string[]
 }
 
 export interface TripDB extends __TripBase__ {

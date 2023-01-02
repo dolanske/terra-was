@@ -1,6 +1,24 @@
+<script setup lang="ts">
+import type { TripDB } from '~~/utils/trip.types'
+
+const posts = reactive<{ value: TripDB[] }>({ value: [] })
+
+onBeforeMount(() => {
+  const { data } = useFetch('/api/trip', { method: 'GET' })
+
+  if (!data.value)
+    return
+
+  posts.value = data.value as TripDB[]
+})
+</script>
+
 <template>
   <div class="container">
-    <h1 id="example-markdown-post">
+    <code>
+      <pre>{{ posts.value }}</pre>
+    </code>
+    <!-- <h1 id="example-markdown-post">
       <a class="anchor" href="#example-markdown-post" aria-hidden="true"><span class="octicon octicon-link" /></a>Example Markdown Post
     </h1>
 
@@ -48,7 +66,7 @@
 
     <blockquote>
       <p>This is a quotation</p>
-    </blockquote>
+    </blockquote> -->
   </div>
 </template>
 

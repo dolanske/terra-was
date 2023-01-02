@@ -43,6 +43,7 @@ function onMapLoaded(instance: Map) {
 }
 
 const selectedCountry = ref<string | null>()
+const selectedCenter = ref<[number, number]>([0, 0])
 
 function selectCountry(code: string | null) {
   if (!map.value)
@@ -58,6 +59,7 @@ function selectCountry(code: string | null) {
 function reset() {
   selectCountry(null)
   selectedCountry.value = null
+  selectedCenter.value = [0, 0]
 }
 
 /**
@@ -77,6 +79,7 @@ function onMapClicked(e: MapMouseEvent) {
 
   selectCountry(country)
   selectedCountry.value = country
+  selectedCenter.value = [lng, lat]
 }
 
 const onMapZoomed = debounce((e: MapboxEvent<'zoom'>) => {
@@ -104,7 +107,13 @@ const onMapZoomed = debounce((e: MapboxEvent<'zoom'>) => {
       </button>
     </div>
 
-    <MapCreatePost v-if="selectedCountry" :code="selectedCountry" @close="reset()" />
+    <MapCreatePost
+      v-if="selectedCountry"
+      :code="selectedCountry"
+      :zoom="properties.zoom"
+      :center="selectedCenter"
+      @close="reset()"
+    />
 
     <div class="map-wrapper">
       <MapboxMap
