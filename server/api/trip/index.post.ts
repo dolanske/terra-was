@@ -23,9 +23,7 @@ export default defineEventHandler(async (event) => {
 
   const id = await TripModel.countDocuments() + 1
 
-  /**
-   * We do not save the visits folder, but
-   */
+  // We do not save the visits folder, but
   const newTrip: TripDB = { id, title, description, map, iso, images, date }
 
   // Save a new visit to a country db schema

@@ -3,6 +3,7 @@ import type { SearchOutput } from 'country-code-lookup'
 import { byIso } from 'country-code-lookup'
 import type { Photo } from '~~/utils/photo.types'
 import type { __TripBase__ } from '~~/utils/trip.types'
+import type { Uploader } from '~~/utils/other.types'
 
 const props = defineProps<{
   code: string
@@ -32,15 +33,37 @@ watch(() => props.code, (value) => {
 })
 
 async function submit() {
-  // https://pqina.nl/blog/upload-image-with-nodejs/
-
+  // Submit the whole form
 }
 
 /**
  * Handle uploading of images
+ *
+ * Ideally, we want to first iterate over the list of uploaded files.
+ * Due to not having the photo ID available during the upload, we
+ * reference all files using an index.
+ *
+ * #1 Take the form files and append an information about them.
+ * {
+ *  rawFile: The raw form submission object
+ *  file: the object which is appended after photo is uploaded
+ *  error: null
+ *  loading: true
+ * }
+ *
+ * #1.1 All rendered elements show loading
+ *
+ * #2 At the same time, begin uploading loop (uploadPhotos). Store the index of the upload loop.
+ * When a photo is uploaded, by index, we change the loading to false, and if error occured, append
+ * the message.
+ *
+ * #3 When photo is uploaded. Its object is appended to the array item by reference index
+ * and within the element, we can remove the loading state and instead render the <img> element
+ * with the provided path.
+ *
  */
 
-const photos = reactive({ files: [] })
+const uploader = reactive<{ photos: Map<number, Uploader> }>({ photos: new Map() })
 
 async function uploadPhotos(e: Event) {
   e.preventDefault()
@@ -51,19 +74,55 @@ async function uploadPhotos(e: Event) {
   if (!files)
     return
 
-  let index = 0
+  // Iterate over files once, without delays and save them and the important data
+  let index1 = 0
+  for (const file of files) {
+    uploader.photos.set(index1, {
+      index: index1,
+      rawFile: file,
+      file: null,
+      loading: true,
+    })
+
+    index1++
+  }
+
+  // Iterate over files again, this time we wait for them to upload one by one.
+  let index2 = 0
 
   for (const file of files) {
     const formData = new FormData()
     formData.append('photo', file)
 
-    const id = await useFetch<Photo>('/api/photo', {
+    const { data } = await useFetch<Photo>('/api/photo', {
       method: 'POST',
       body: formData,
     })
 
-    index++
+    if (!data.value)
+      return
+
+    const obj = uploader.photos.get(index2)
+
+    if (!obj)
+      return
+
+    uploader.photos.set(index2, {
+      ...obj,
+      file: data.value,
+      loading: false,
+    })
+
+    index2++
   }
+}
+
+async function deletePhoto(item: Uploader) {
+  if (!item.file)
+    return
+
+  await useFetch(`/api/photo/${item.file.id}`, { method: 'DELETE' })
+  uploader.photos.delete(item.index)
 }
 </script>
 
@@ -83,17 +142,19 @@ async function uploadPhotos(e: Event) {
 
     <form @submit="submit">
       <FormInput v-model:value="form.title" label="Name" :placeholder="`${country.capital} was awesome!`" />
-      <FormTextarea v-model:value="form.description" label="Description" placeholder="Let me tell you a story..." />
+      <FormTextarea v-model:value="form.description" label="Description" placeholder="Feel free to use markdown" />
 
       <span class="form-label">Photos</span>
       <div class="image-input-wrap">
-        <!-- <MapPostImage path="https://friends.hivecom.net/data/image/u1Lc1SdJTkm_ebw6fvbCJQ/tiny.jpg" @remove="removeImage('')" /> -->
-        <!-- <MapPostImage path="https://friends.hivecom.net/data/image/HSd2nWqeRnaRZIX_LzoxAg/tiny.jpg" @remove="removeImage('')" /> -->
-        <!-- <MapPostImage path="https://friends.hivecom.net/data/image/WrmT272FQFaa8zmxPexjVg/tiny.jpg" @remove="removeImage('')" /> -->
-        <!-- <MapPostImage path="https://friends.hivecom.net/data/image/rNbSjBKCSx-RWWSE7SZCYQ/tiny.jpg" @remove="removeImage('')" /> -->
+        <MapCreatePhoto
+          v-for="[, item] in uploader.photos"
+          :key="item.index"
+          :data="item"
+          @remove="deletePhoto(item)"
+        />
 
         <div class="image-input">
-          <input type="file" name="file" multiple accept="image/*" @input="uploadPhotos">
+          <input id="file" type="file" name="file" multiple accept="image/*" tabindex="0" @input="uploadPhotos">
           <label for="file">
             <Icon name="ic:baseline-add-photo-alternate" size="1.4rem" />
             Photos
@@ -101,6 +162,16 @@ async function uploadPhotos(e: Event) {
         </div>
       </div>
     </form>
+
+    <br>
+
+    <code>
+      <pre>
+{{ form }}
+
+{{ uploader.photos }}
+      </pre>
+    </code>
   </div>
 </template>
 
@@ -124,8 +195,13 @@ async function uploadPhotos(e: Event) {
     gap: 10px;
     grid-template-columns: repeat(4, 1fr);
 
-    input {
+    input[type=file] {
       display: none;
+
+      &:focus + label {
+        border-color: var(--color-accent);
+
+      }
 
       & + label {
         @include t();

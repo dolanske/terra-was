@@ -4,7 +4,6 @@
 import { TripModel } from '~~/server/models/trip'
 
 export default defineEventHandler(async (event) => {
-  // TODO: use useQuery instead
   const id = event.context.params.id
 
   return TripModel.findOne({ _id: id })

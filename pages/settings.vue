@@ -1,7 +1,7 @@
 <script setup lang='ts'>
 import type { Photo } from '~~/utils/photo.types'
 
-const res = reactive<{ v: string[] }>({ v: [] })
+const res = reactive<{ v: Array<Photo | null> }>({ v: [] })
 
 // This event should be called when files are input (should be on <input> el)
 async function submit(event: Event) {
@@ -21,72 +21,35 @@ async function submit(event: Event) {
       body: formData,
     })
 
-    res.v.push(id.data.value?.path ?? '')
-
-    // res.value.push(id.data)
-    // res.value = id.data.value?.path ?? ''
+    if (id.data.value)
+      res.v.push(id.data.value)
   }
+}
 
-  // res.value = await useFetch('/api/trip', {
-  //   method: 'POST',
-  //   body: {
-  //     title: 'Hello World',
-  //     description: 'This better work.',
-  //     iso: 'FIN',
-  //     images: [],
-  //     date: Date.now(),
-  //     map: {
-  //       zoom: 10,
-  //       center: [26.580630439319265, 63.63131223322321],
-  //     },
-  //   },
-  // })
-
-  // res.value = await useFetch('/api/country', {
-  //   method: 'POST',
-  //   body: {
-  //     iso: 'FIN',
-  //   },
-  // })
-
-  // res.value = await useFetch('/api/country/FIN')
-
-  // res.value = await useFetch('/api/country', {
-  //   method: 'PUT',
-  //   body: {
-  //     iso: 'FIN',
-  //     date: Date.now(),
-  //     postId: 10,
-  //   },
-  // })
+async function delPhoto(item: Photo) {
+  const res = await useFetch(`/api/photo/${item.id}`, { method: 'DELETE' })
+  console.log(res)
 }
 </script>
 
 <template>
   <div>
     <br>
-
     <br>
-
     <br>
-
     <code>
-
-      <pre>
-        {{ res }}
-      </pre>
+      <pre>{{ res }}</pre>
     </code>
     <br>
     <hr style="border-bottom:1px solid gray;">
     <br>
-    <form>
-      <input type="file" name="file" multiple accept="image/*" @input="submit">
-
-      <!-- <button class="button btn-gray" type="submit">
-        Query
-      </button> -->
-    </form>
-
-    <div />
+    <form><input type="file" name="file" multiple accept="image/*" @input="submit"></form>
+    <br>
+    <hr style="border-bottom:1px solid gray;">
+    <template v-for="button in res.v" :key="button.id">
+      <button v-if="button" @click="delPhoto(button)">
+        {{ button.path }}
+      </button>
+    </template>
   </div>
 </template>

@@ -80,6 +80,12 @@ code {
   padding: 20px;
 }
 
+pre {
+  word-break: break-all;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+}
+
 p code {
   display: inline;
   width: auto;

@@ -13,6 +13,7 @@
     "country-code-lookup": "^0.0.22",
     "formidable": "^2.1.1",
     "lodash-es": "^4.17.21",
+    "marked": "^4.2.5",
     "mongoose": "^6.8.2",
     "mongoose-bcrypt": "^1.10.0",
     "sass": "^1.57.1",
