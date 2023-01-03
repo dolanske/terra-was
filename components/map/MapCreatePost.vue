@@ -269,6 +269,7 @@ async function submit() {
     border-radius: var(--radius-md);
     padding: 20px;
     background-color: var(--color-bg-light-75);
+    z-index: -1;
 
     .tag {
       margin-bottom: 10px;
@@ -385,7 +386,7 @@ async function submit() {
     gap: 5px;
     margin-bottom: 5px;
     width: 100%;
-    z-index: 100;
+    z-index: 200;
 
     button {
       width: 35px;

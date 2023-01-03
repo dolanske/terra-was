@@ -11,6 +11,14 @@ onBeforeMount(() => {
 
   trips.value = data.value as TripDB[]
 })
+
+/**
+ * Filter
+ */
+type SortBy = 'country' | 'date' | 'visits'
+
+const sortBy = ref<SortBy>('country')
+const search = ref('')
 </script>
 
 <template>
@@ -20,8 +28,15 @@ onBeforeMount(() => {
       subtitle="List of all saved locations sorted by date, country or times visited."
       bg="/img/location-bg.svg"
     />
-
-    <div class="container list">
+    <div class="container">
+      <input v-model="search" type="text" placeholder="Search for a trip">
+      <select id="" name="">
+        <option value="cum">
+          cum
+        </option>
+      </select>
+    </div>
+    <div class="container post">
       <div class="posts-list">
         <LocationListItem v-for="trip in trips.value" :key="trip.id" :data="trip" />
       </div>
@@ -42,7 +57,6 @@ onBeforeMount(() => {
 
 <style lang="scss">
 .route-location {
-  // padding: 10px;
   padding-top: 10px;
   padding-right: 10px;
 
@@ -85,18 +99,16 @@ onBeforeMount(() => {
 }
 
 .container {
-  display: grid;
-  padding: 80px 0;
+  display: block;
   margin: 0 auto;
-  grid-template-columns: 1fr 156px;
-  gap: 128px;
+  width: 1024px;
+  margin-bottom: 32px;
 
   &.post {
-    width: 756px;
-  }
-
-  &.list {
-    width: 1024px;
+    margin-bottom: 0;
+    display: grid;
+    grid-template-columns: 1fr 156px;
+    gap: 128px;
   }
 }
 </style>
