@@ -1,9 +1,9 @@
 <script setup lang='ts'>
-
+const route = useRoute()
 </script>
 
 <template>
-  <aside>
+  <aside :class="{ 'has-line': route.path !== '/' }">
     <!-- I am a header -->
 
     <div class="vertical-wrapper">
@@ -35,7 +35,11 @@ aside {
   height: 100vh;
   border-top-right-radius: var(--radius-lg);
   border-bottom-right-radius: var(--radius-lg);
-  // border-right: 1px solid var(--color-border);
+
+  &.has-line {
+    border-radius: 0;
+    // border-right: 1px solid var(--color-border);
+  }
 
   .vertical-wrapper {
     display: flex;

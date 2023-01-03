@@ -10,3 +10,5 @@
 
 - [] [Locations] List all locations from API
 - [] [LocationDetail] List all data about a location 
+
+- [] [Types] fix post type clashing between back & front end
