@@ -62,11 +62,11 @@
 // Different variations
 
 .form-item {
-  width: 384px;
-
+  
   &.form-search {
     position: relative;
     margin: 0;
+    width: 80%;
 
     .form-icon {
       position: absolute;
