@@ -87,9 +87,16 @@ button {
   &.btn-transparent {
     color: var(--color-text-white);
 
+    &.active-accent {
+      &.btn-active,
+      &:hover {
+        background-color: var(--color-accent-bg);
+        color: var(--color-text);
+      }
+    }
+
     &:hover {
       background-color: var(--color-bg)
     }
   }
-
 }

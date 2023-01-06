@@ -10,5 +10,13 @@
   &.right {
     justify-content: flex-end;
   }
-  
+}
+
+.loading-indicator {
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 516px;
+  border: 1px solid var(--color-border);
 }

@@ -25,7 +25,7 @@ const props = defineProps<{
   background-color: var(--color-bg-light);
   box-shadow: var(--shadow);
   position: relative;
-  margin-bottom: 80px;
+  margin-bottom: 40px;
 
   h2 {
     @include font(400);
