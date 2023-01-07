@@ -31,17 +31,17 @@ const thumbnail = computed(() => {
     ],
   })
 
-  return `https://api.mapbox.com/styles/v1/${style}/static/${lng},${lat},${props.data.map.zoom},0.00,0.00/740x292?access_token=${mapToken}&addlayer=${layer}&before_layer=country-label`
+  return `https://api.mapbox.com/styles/v1/${style}/static/${lng},${lat},${props.data.map.zoom - 0.5},0.00,0.00/740x292?access_token=${mapToken}&addlayer=${layer}&before_layer=country-label`
 })
 </script>
 
 <template>
   <NuxtLink :to="`/locations/${props.data.id}`" class="post-item">
     <div class="post-title">
-      <h6>
-        <img :src="getFlagUrl(byIso(props.data.iso)?.iso2 ?? '')" alt="">
+      <h5>
+        <img :src="getFlagUrl(byIso(props.data.iso)?.iso2 ?? '')" :alt="`FLag of ${props.data.iso}`">
         {{ props.data.title }}
-      </h6>
+      </h5>
       <div class="flex-wrap">
         <span class="post-date">{{ date }}</span>
         <span v-if="props.data.images.length > 0">
@@ -53,8 +53,8 @@ const thumbnail = computed(() => {
 
     <div class="post-map">
       <div class="hover-arrow">
-        <Icon name="mdi:arrow-top-right" />
         <span>Click for details</span>
+        <Icon name="mdi:arrow-right" />
       </div>
 
       <img
@@ -70,7 +70,7 @@ const thumbnail = computed(() => {
   @include t(0.4s);
   display: block;
   width: 100%;
-  margin-bottom: 40px;
+  // margin-bottom: 20px;
 
   &:hover {
     .post-map {
@@ -82,7 +82,7 @@ const thumbnail = computed(() => {
 
         svg {
           opacity: 1;
-          transform: rotate(0);
+          transform: translateX(10px);
         }
 
         span {
@@ -93,17 +93,17 @@ const thumbnail = computed(() => {
   }
 }
 
-h6 {
+h5 {
   @include t();
   @include font(400);
   display: flex;
   gap: 10px;
   align-items: flex-start;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
   color: var(--color-text);
 
   img {
-    transform: translateY(-4px)
+    transform: translateY(1px)
   }
 }
 
@@ -124,13 +124,11 @@ h6 {
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-direction: column;
     gap: 10px;
     opacity: 0;
 
     svg {
       @include t(0.4s);
-      transform: rotate(-90deg);
       color: var(--color-accent);
     }
 
@@ -155,6 +153,7 @@ h6 {
 .flex-wrap {
   gap: 30px;
   margin-bottom: 30px;
+  padding-left: 45px;
 
   span {
     font-size: 0.8rem;

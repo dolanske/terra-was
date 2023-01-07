@@ -29,4 +29,10 @@ export default defineNuxtConfig({
     IS_DEV: process.env.NODE_ENV !== 'production',
     IS_PRD: process.env.NODE_ENV === 'production',
   },
+  app: {
+    // pageTransition: {
+    //   name: 'page',
+    //   mode: 'out-in',
+    // },
+  },
 })

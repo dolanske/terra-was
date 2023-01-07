@@ -5,7 +5,7 @@ import { TripModel } from '~~/server/models/trip'
 export default defineEventHandler(async (event) => {
   const id = event.context.params.id
 
-  return TripModel.findOne({ _id: id })
+  return TripModel.findOne({ id })
     .then((res) => {
       if (!res) {
         event.node.res.statusCode = 404

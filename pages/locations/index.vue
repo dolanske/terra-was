@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { words } from 'lodash'
 import type { TripDB } from '~~/utils/trip.types'
 
 const trips = ref<TripDB[]>([])
@@ -121,7 +120,7 @@ const navigationOptions = computed(() => {
   .posts-list {
     display: flex;
     flex-wrap: wrap;
-    gap: 56px;
+    gap: 40px;
     justify-content: flex-start;
   }
 
@@ -157,7 +156,6 @@ const navigationOptions = computed(() => {
 }
 
 .container {
-  margin: 0 auto;
   width: 1024px;
   margin-bottom: 32px;
   display: grid;
