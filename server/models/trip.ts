@@ -16,7 +16,7 @@ const schema = new mongoose.Schema<TripDB>(
     date: Number,
     images: Array,
   },
-  { timestamps: true, strict: true, strictQuery: true },
+  { timestamps: true },
 )
 
 schema.plugin(bcrypt)

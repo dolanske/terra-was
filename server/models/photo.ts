@@ -7,7 +7,7 @@ const schema = new mongoose.Schema<Photo>(
     id: { unique: true, type: String },
     path: String,
   },
-  { timestamps: true, strict: true, strictQuery: true },
+  { timestamps: true },
 )
 
 schema.plugin(bcrypt)

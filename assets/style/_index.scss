@@ -1,6 +1,6 @@
-@import './reset';
-@import './vars';
-@import './fonts';
+@import "./reset";
+@import "./vars";
+@import "./fonts";
 @import "./tooltip";
 @import "./text";
 @import "./button";
@@ -12,7 +12,7 @@ body {
   @include sans(400);
   background-color: var(--color-bg);
   color: var(--color-text);
-  overflow-x: hidden;
+  // overflow-x: hidden;
 }
 
 .mapboxgl-control-container {

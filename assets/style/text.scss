@@ -46,7 +46,7 @@ h6 {
 blockquote {
   border-radius: var(--radius-md);
   display: block;
-  margin-bottom: 40px;
+  margin-bottom: 30px;
   padding: 20px;
   border: 1px solid var(--color-border);
   position: relative;
@@ -64,9 +64,7 @@ blockquote {
   }
 
   p {
-    &:last-of-type {
-      margin-bottom: 0;
-    }
+    margin-bottom: 0;
   }
 }
 
@@ -74,11 +72,11 @@ p {
   @include sans();
   display: block;
   margin-bottom: 1em;
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   line-height: 1.6em;
   color: var(--color-text-light);
 
-  &  > * {
+  & > * {
     font-size: inherit;
   }
 
@@ -86,7 +84,7 @@ p {
   strong,
   b {
     @include sans(600);
-  } 
+  }
 
   a {
     color: var(--color-accent);

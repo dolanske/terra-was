@@ -12,33 +12,12 @@ const properties = useLocalStorage('map-properties', {
   zoom: 10,
 }, { deep: true })
 
-// console.log(properties.value)
-
-const accent = useCssVar('--color-accent')
-
 /**
  *  Runs when map is loaded
  */
-function onMapLoaded(instance: Map) {
-  map.value = instance
-
-  instance.addLayer(
-    {
-      'id': 'country-boundaries',
-      'source': {
-        type: 'vector',
-        url: 'mapbox://mapbox.country-boundaries-v1',
-      },
-      'source-layer': 'country_boundaries',
-      'type': 'fill',
-      'paint': {
-        'fill-color': accent.value,
-        'fill-opacity': 0.4,
-      },
-    },
-    'country-label',
-  )
-
+function onMapLoaded(ins: Map) {
+  map.value = ins
+  addCountryLayer(ins)
   selectCountry(null)
 }
 
@@ -46,14 +25,7 @@ const selectedCountry = ref<string | null>()
 const selectedCenter = ref<[number, number]>([0, 0])
 
 function selectCountry(code: string | null) {
-  if (!map.value)
-    return
-
-  map.value.setFilter('country-boundaries', [
-    'in',
-    'iso_3166_1_alpha_3',
-    code ?? '',
-  ])
+  addCountryHighlight(map, code)
 }
 
 function reset() {

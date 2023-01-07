@@ -1,6 +1,6 @@
 <template>
   <div>
-    <NuxtLayout>
+    <NuxtLayout :name="$route.name === 'locations-id' ? 'post' : 'default'">
       <NuxtPage />
     </NuxtLayout>
   </div>

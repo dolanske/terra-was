@@ -56,7 +56,9 @@ button {
   @include t();
   @include sans(400);
   border-radius: var(--radius-sm);
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 5px;
   height: 38px;
   line-height: 38px;
   padding: 0 15px;
@@ -71,7 +73,7 @@ button {
     color: var(--color-text);
 
     &:hover {
-      background-color: var(--color-bg-dark-hover)
+      background-color: var(--color-bg-dark-hover);
     }
   }
 
@@ -80,7 +82,7 @@ button {
     color: var(--color-text);
 
     &:hover {
-      background-color: var(--color-accent-bg-hover)
+      background-color: var(--color-accent-bg-hover);
     }
   }
 
@@ -96,7 +98,7 @@ button {
     }
 
     &:hover {
-      background-color: var(--color-bg)
+      background-color: var(--color-bg);
     }
   }
 }

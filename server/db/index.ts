@@ -7,6 +7,8 @@ const { error, log } = console
 export default async () => {
   const config = useRuntimeConfig()
 
+  mongoose.set('strictQuery', true)
+
   mongoose.connect(config.MONGO_URL)
     .then(() => log('connected to db'))
     .catch(err => error('Error, no connection.', err))

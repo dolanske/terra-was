@@ -7,7 +7,7 @@ const schema = new mongoose.Schema<Country>(
     iso: { type: String, unique: true },
     visits: [{ date: Number, postId: String }],
   },
-  { timestamps: true, strict: true, strictQuery: true },
+  { timestamps: true },
 )
 
 schema.plugin(bcrypt)
