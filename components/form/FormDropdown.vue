@@ -12,7 +12,7 @@ type Button =
 
 interface Props {
   options: Button[]
-  modelValue: any
+  modelValue?: any
   dropLabel?: string
 }
 
@@ -97,7 +97,7 @@ function getValue(btn: Button) {
   top: 100%;
   right: 0;
   width: 224px;
-  max-height: 216px;
+  max-height: 256px;
   overflow-y: auto;
   scrollbar-width: 4px;
   scrollbar-width: thin;

@@ -54,7 +54,7 @@ const thumbnail = computed(() => {
     <div class="post-map">
       <div class="hover-arrow">
         <span>Click for details</span>
-        <Icon name="mdi:arrow-right" />
+        <Icon name="mdi:arrow-right" size="20px" />
       </div>
 
       <img
@@ -70,7 +70,6 @@ const thumbnail = computed(() => {
   @include t(0.4s);
   display: block;
   width: 100%;
-  // margin-bottom: 20px;
 
   &:hover {
     .post-map {
@@ -110,8 +109,8 @@ h5 {
 .post-map {
   @include t(0.4s);
   display: block;
-  width: 100%;
-  height: 224px;
+  width: 60%;
+  height: 156px;
   border-radius: var(--radius-lg);
   overflow: hidden;
   position: relative;
@@ -135,7 +134,7 @@ h5 {
     span {
       @include t(0.4s);
       @include font(400);
-      font-size: 1rem;
+      font-size: 0.8rem;
       color: var(--color-text);
       transform: translateY(8px);
     }

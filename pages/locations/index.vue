@@ -18,15 +18,16 @@ onMounted(async () => {
 /**
  * Filter
  */
-type SortBy = 'country' | 'date' | 'visits'
+type SortBy = 'country' | 'date-new' | 'date-old' | 'visits'
 
 const sort = ref<SortBy>('country')
 const search = ref('')
 
 const dropdownOptions = [
   { value: 'country', label: 'Country' },
-  { value: 'date', label: 'Upload Date' },
-  { value: 'visits', label: 'Visits' },
+  { value: 'visits', label: 'Country Visits' },
+  { value: 'date-new', label: 'Date (Newest)' },
+  { value: 'date-old', label: 'Date (Oldest)' },
 ]
 
 // @ts-expect-error There is no chance anything but the item will be found
@@ -49,6 +50,13 @@ const filteredLocations = computed(() => {
 
   // #2 Sort soft
 
+  switch (sort.value) {
+    case 'date-new': return data.sort((a, b) => a.date > b.date ? -1 : 1)
+    case 'date-old': return data.sort((a, b) => a.date > b.date ? -1 : 1)
+  }
+
+  // console.log('rendered')
+
   // #3 Sort hard (when clicked nav)
 
   return data
@@ -68,6 +76,10 @@ const navigationOptions = computed(() => {
       //     return trip
       //   })
     }
+
+    // case 'date': {
+
+    // }
   }
 })
 </script>

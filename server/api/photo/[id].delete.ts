@@ -13,7 +13,7 @@ export default defineEventHandler(async (event) => {
     }
   }
 
-  const exists = PhotoModel.findOne({ id })
+  const exists = await PhotoModel.findOne({ id })
 
   if (!exists) {
     event.node.res.statusCode = 500

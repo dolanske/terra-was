@@ -63,7 +63,7 @@ window.addEventListener('keydown', (e) => {
   .modal-close {
     position: absolute;
     top: 15px;
-    left: 20px;
+    right: 20px;
     height: 30px;
     line-height: 30px;
     font-size: 0.8rem;

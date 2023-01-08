@@ -89,6 +89,24 @@ async function openSlider() {
     },
   })
 }
+
+// Deleting a post
+const options = ['Cancel', 'Delete']
+const deleting = ref(false)
+
+async function deletePost(option: string) {
+  if (option === 'Delete' && trip.value) {
+    deleting.value = true
+
+    const { error } = await useFetch(`/api/trip/${trip.value.id}`, { method: 'DELETE' })
+
+    if (error.value) {
+      // Handle error
+    }
+
+    deleting.value = false
+  }
+}
 </script>
 
 <template>
@@ -134,9 +152,14 @@ async function openSlider() {
               <button class="button btn-transparent active-accent" data-title-top="Edit Trip">
                 <Icon name="material-symbols:edit-location-alt" size="20px" />
               </button>
-              <button class="button btn-transparent active-accent" data-title-top="Delete Trip">
-                <Icon name="material-symbols:delete-outline-rounded" size="20px" />
-              </button>
+
+              <FormDropdown :options="options" @set="deletePost">
+                <template #default="{ open }">
+                  <button class="button btn-transparent active-accent" data-title-top="Delete Trip" :class="{ 'btn-active': open }">
+                    <Icon name="material-symbols:delete-outline-rounded" size="20px" />
+                  </button>
+                </template>
+              </FormDropdown>
             </div>
           </div>
 
@@ -162,13 +185,6 @@ async function openSlider() {
                 <span>Last visit</span>
                 <strong>{{ lastVisit }}</strong>
               </div>
-
-              <!-- <hr>
-              <div class="flex-wrap left">
-                <button class="button btn-gray">
-                  All Visits
-                </button>
-              </div> -->
             </button>
 
             <button v-if="trip.images.length > 0" class="gallery-wrap" data-title-top="Open Gallery" @click="modalOpen = true">
@@ -238,6 +254,7 @@ strong {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-wrap: wrap;
   gap: 10px;
 
   button {
@@ -248,7 +265,7 @@ strong {
 
     &:hover,
     &.is-active {
-      outline: 2px solid var(--color-accent);
+      outline: 3px solid var(--color-accent);
     }
 
     img {
