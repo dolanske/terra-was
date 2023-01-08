@@ -1,0 +1,55 @@
+// Update default styling for slider component
+
+#gallery {
+  margin-bottom: 20px;
+  
+  .slider-dots .slider-dot.active {
+    background-color: var(--color-accent);
+  }
+  
+  #slider-button-left, #slider-button-right {
+    @include t();
+    background-color: var(--color-bg-light-40);
+    text-align: center !important;
+    background-color: var(--color-accent-bg); 
+
+    &:disabled {
+      display: none;
+      svg {
+        fill: var(--color-text-lighter) !important;
+      }
+    }
+
+    svg {
+      @include t();
+      fill: var(--color-accent) !important;
+      transform: translateY(0);
+    }
+
+    &:hover {
+      background-color: var(--color-accent-bg-hover); 
+    }
+  }
+  
+  .slide  {
+    display: flex;
+    align-items: center;
+    background-color: transparent;
+  
+    img {
+      border-radius: var(--radius-md);
+      max-width: 100%;
+      overflow: hidden;
+      max-height: 100%;
+      object-fit: contain;
+      pointer-events: none;
+      display: block;
+      margin: auto;
+    }
+  }
+
+  .slider-dots .slider-dot {
+    width: 8px;
+    height: 8px;
+  }
+}

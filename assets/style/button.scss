@@ -97,6 +97,14 @@ button {
       }
     }
 
+    &.active-gray {
+      &.btn-active,
+      &:hover {
+        background-color: var(--color-bg-dark-hover);
+        color: var(--color-text);
+      }
+    }
+
     &:hover {
       background-color: var(--color-bg);
     }

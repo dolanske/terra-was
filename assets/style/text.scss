@@ -104,8 +104,10 @@ p {
   img {
     border-radius: var(--radius-md);
     display: block;
-    max-width: 120%;
-    width: 120%;
+    width: 100%;
+    max-width: 100%;
+    // max-width: calc(100% + 80px);
+    // width: calc(100% + 80px);
     object-fit: contain;
     object-position: center;
     box-shadow: var(--shadow);

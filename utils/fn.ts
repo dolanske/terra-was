@@ -9,3 +9,5 @@ export function searchInStr(match: string | string[], search: string) {
   const split = search.trim().split(/\s+/)
   return split.every(s => joint.toLowerCase().includes(s.toLowerCase()))
 }
+
+export const DATE_FORMAT = 'MMMM DD, YYYY'

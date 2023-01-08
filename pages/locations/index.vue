@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { byIso } from 'country-code-lookup'
 import type { TripDB } from '~~/utils/trip.types'
 
 const trips = ref<TripDB[]>([])
@@ -38,7 +39,11 @@ const filteredLocations = computed(() => {
   // #1 Search
   if (search.value) {
     data = trips.value.filter((trip) => {
-      return searchInStr(trip.title, search.value)
+      // @ts-expect-error I can confirm that this is the result. Why does the
+      // returning interface cry about it? I dont know.
+      const { continent, country } = byIso(trip.iso)
+
+      return searchInStr([trip.title, continent, country], search.value)
     })
   }
 

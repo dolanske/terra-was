@@ -8,6 +8,7 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@dolanske/slider": "github:dolanske/slider",
     "@types/formidable": "^2.0.5",
     "@types/lodash-es": "^4.17.6",
     "country-code-lookup": "^0.0.22",

@@ -19,6 +19,13 @@ const emit = defineEmits<{
 const country = computed<SearchOutput>(() => byIso(props.code))
 const expand = ref(false)
 
+// Get visit information about country
+const visits = ref(0)
+watch(() => props.code, async (iso) => {
+  const data = await fetchCountryInfo(iso)
+  visits.value = data?.visits.length ?? 0
+})
+
 /**
  * Handle uploading of images
  *
@@ -180,12 +187,12 @@ async function submit() {
       </div>
 
       <div class="title-wrap">
-        <img :src="getFlagUrl(country.iso2)" alt="">
+        <img :src="getFlagUrl(country.iso2)" :alt="`${country.country} flag`">
         <h6>{{ country.country }}</h6>
       </div>
 
       <ul class="metadata">
-        <li>Visited: <strong>0 times</strong></li>
+        <li>Visits: <strong>{{ visits }} </strong></li>
         <li>Region: <strong>{{ country.region }}</strong></li>
       </ul>
 

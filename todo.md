@@ -1,14 +1,16 @@
 # Todo
 
-- [x] [MapCreatePost] Button to make creation form large (50% of screen with max width of 756px)
-- [x] [MapCreatePost] Markdown preview when writing (can toggle, is updated live)
-- [x] [MapCreatePost] Implement uploading of a trip
 - [] [MapCreatePost] Form validation (use v-validate)
 - [] [MapCreatePost] Add visual indicator of loading when posting a trip. Also no user clicks are registered until it completes
   - [] add a "successful post" with buttons (first: go to post, second btn: close form)
 
+- [x] [Locations] List all locations from API
+  - [] Make Map a bit smaller
 
-- [] [Locations] List all locations from API
-- [] [LocationDetail] List all data about a location 
+- [] When sorting by countries, show a little country title with information and posts under (continent, region, visits, last visit etc )
 
-- [] [Types] fix post type clashing between back & front end
+- [] Click a country on location/id will open locations and automatically sort by a country + search for the country name
+
+- [] button to delete trip (dropdown yes, cancel dropdown)
+
+- [] Trip Editing (simple page with a form prefilled to a post ID)
